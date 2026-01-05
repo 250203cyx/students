@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>放学等我 - 小说专题</title>
+    <style>
+        /* 变量定义 */
+        :root {
+            --primary: #8a4de3;
+            --secondary: #ff6b9d;
+            --dark: #2c2c54;
+            --light: #f8f9fa;
+        }
+
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: “Microsoft YaHei“, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edfb 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        .nav-links a::after {
+            content: ““;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* 响应式导航 */
+        .menu-btn {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        /* 主内容区 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* 封面区 */
+        .hero {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            align-items: center;
+            margin-bottom: 60px;
+        }
+
+        .cover-container {
+            flex: 1;
+            min-width: 300px;
+            perspective: 1000px;
+        }
+
+        .cover {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transform: rotateY(-5deg);
+            transition: transform 0.5s;
+        }
+
+        .cover:hover {
+            transform: rotateY(0);
+        }
+
+        .hero-content {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .hero-content h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        .author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            font-size: 1.2rem;
+        }
+
+        .author img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .synopsis {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(138, 77, 227, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(138, 77, 227, 0.4);
+        }
+
+        /* 角色区 */
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin: 60px 0 40px;
+            position: relative;
+            color: var(--dark);
+        }
+
+        .section-title::after {
+            content: ““;
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        .characters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .character-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            transition: transform 0.4s;
+        }
+
+        .character-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .character-img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+        }
+
+        .character-info {
+            padding: 20px;
+        }
+
+        .character-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        /* 引用区 */
+        .quotes {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            padding: 60px 30px;
+            border-radius: 15px;
+            margin: 60px 0;
+            color: white;
+            text-align: center;
+        }
+
+        .quote {
+            font-size: 1.8rem;
+            font-style: italic;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .quote-author {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* 书评区 */
+        .reviews {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .review-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        }
+
+        .review-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .review-header img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .rating {
+            color: #FFD700;
+            letter-spacing: 3px;
+            margin-left: auto;
+        }
+
+        /* 页脚 */
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 60px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: white;
+                padding: 20px;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .menu-btn {
+                display: block;
+            }
+            
+            .hero {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">放学等我</div>
+            <div class="nav-links" id="navLinks">
+                <a href="#home">首页</a>
+                <a href="#characters">角色</a>
+                <a href="#quotes">名句</a>
+                <a href="#reviews">书评</a>
+            </div>
+            <div class="menu-btn" id="menuBtn">☰</div>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <div class="container">
+        <!-- 封面区 -->
+        <section class="hero" id="home">
+            <div class="cover-container">
+                <img src="R-C.jpg"alt="放学等我" alt="小说封面" class="cover">
+            </div>
+            <div class="hero-content">
+                <h1>放学等我</h1>
+                <div class="author">
+                    <img src="https://via.placeholder.com/50/ff6b9d/ffffff?text=作" alt="作者">
+                    <span>作者：酱子贝</span>
+                </div>
+                <div class="synopsis">
+                    <p>《放学等我》是一部青春校园题材的畅销小说，讲述了学霸陈景深与转学生喻繁从针锋相对到相互救赎的故事。小说以细腻的笔触描绘了青春期的迷茫、成长与悸动，通过两个性格迥异的少年视角，展现了当代校园生活的真实面貌。</p>
+                    <p>作品融合了轻松幽默的日常与深刻的情感刻画，既描绘了高考压力下的青春奋斗，也探讨了家庭关系、友情与自我认同等现实议题。</p>
+                </div>
+                <a href="#" class="btn">阅读全文</a>
+            </div>
+        </section>
+
+        <!-- 角色介绍 -->
+        <section id="characters">
+            <h2 class="section-title">主要角色</h2>
+            <div class="characters">
+                <div class="character-card">
+                    <img src="p97674584.png"alt="陈景深" alt="陈景深" class="character-img">
+                    <div class="character-info">
+                        <h3>陈景深</h3>
+                        <p>年级学霸，外表高冷实则内心敏感。父母离异后跟随母亲生活，背负着家庭的高期望。擅长数学和物理，有严重的洁癖和强迫症。</p>
+                    </div>
+                </div>
+                <div class="character-card">
+                    <img src="p97674591.png"alt="喻繁" alt="喻繁" class="character-img">
+                    <div class="character-info">
+                        <h3>喻繁</h3>
+                        <p>转学生，性格张扬不羁，因父亲工作调动频繁转学。擅长篮球和美术，数学成绩极差但语文天赋突出。用叛逆掩饰内心的不安全感。</p>
+                    </div>
+                </div>
+                <div class="character-card">
+                    <img src="屏幕截图 2026-01-03 145545.jpg"alt="f5组合" alt="f5组合" class="character-img">
+                    <div class="character-info">
+                        <h3>f5组合</h3>
+                        <p>章静娴，左宽，王潞安，喻繁，陈景深。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 名句 -->
+        <section id="quotes">
+            <div class="quotes">
+                <p class="quote">“放学等我，不是一句承诺，而是我们心照不宣的暗号——在这个世界上，总有一个人在等你。” </p>
+                <p class="quote-author">—— 摘自《放学等我》第37章</p>
+            </div>
+        </section>
+
+        <!-- 书评 -->
+        <section id="reviews">
+            <h2 class="section-title">读者书评</h2>
+            <div class="reviews">
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="lGS91bgoSxdm2J3.jpg"alt="读" alt="读者">
+                        <div>
+                            <h3>景喻99</h3>
+                            <p>2023-11-15</p>
+                        </div>
+                        <div class="rating">★★★★★</div>
+                    </div>
+                    <p>人物塑造太真实了！陈景深和喻繁就像我们班上的两个男生，作者对青春期心理的把握精准得可怕。校园场景描写尤其出色，教室里的阳光、操场上的汗水、试卷的油墨味...瞬间把我拉回高中时代。</p>
+                </div>
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="R-C.jpg"alt="评" alt="读者">
+                        <div>
+                            <h3>爱景喻一辈子</h3>
+                            <p>2023-12-02</p>
+                        </div>
+                        <div class="rating">★★★★☆</div>
+                    </div>
+                    <p>双男主的情感发展细腻自然，从互相排斥到慢慢理解的过程处理得很有层次。特别喜欢作者用数学题和美术作品作为情感载体的设计，让抽象的情感有了具象的表达。</p>
+                </div>
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="73SO2xLbUe9naQN.thumb.400_0.jpg"alt="论" alt="读者">
+                        <div>
+                            <h3>喻深99</h3>
+                            <p>2024-01-18</p>
+                        </div>
+                        <div class="rating">★★★★★</div>
+                    </div>
+                    <p>高考压力下的青春写照太真实了！家长会、模拟考排名、志愿填报的争吵...每一个场景都让我想起自己的高三。结尾的处理既温暖又留有想象空间，合上书后仍久久沉浸在故事里。</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>© 2025 《放学等我》专题网站 - 仅作学习展示使用</p>
+        <p>文中角色及情节均为虚构，如有雷同纯属巧合</p>
+    </footer>
+
+    <script>
+        // 响应式导航交互
+        const menuBtn = document.getElementById("menuBtn");
+        const navLinks = document.getElementById("navLinks");
+        
+        menuBtn.addEventListener("click", () => {
+            navLinks.classList.toggle("active");
+        });
+
+        // 平滑滚动
+        document.querySelectorAll("a[href^='#'']").forEach(anchor => {
+            anchor.addEventListener("click", function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute("href");
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: "smooth"
+                });
+                
+                if (navLinks.classList.contains("active")) {
+                    navLinks.classList.remove("active");
+                }
+            });
+        });
+
+        // 滚动动画增强
+        window.addEventListener("scroll", () => {
+            const scrollPos = window.scrollY;
+            // 导航栏阴影
+            if (scrollPos > 100) {
+                document.querySelector(".navbar").style.boxShadow = "0 5px 25px rgba(0,0,0,0.1)";
+            } else {
+                document.querySelector(".navbar").style.boxShadow = "0 2px 15px rgba(0,0,0,0.1)";
+            }
+        });
+    </script>
+</body>
+</html>
